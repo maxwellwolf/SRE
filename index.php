@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Lista de Banco de Dados</title>
+    <title>Lista de Nomes</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -76,19 +76,19 @@
     </script>
 </head>
 <body>
-    <h1>Lista de Banco de Dados</h1>
+    <h1>Lista de Nome</h1>
     <form method="GET" action="">
-        <input type="text" name="name" placeholder="Digite um nome">
+        <input type="text" name="nome" placeholder="Digite um nome">
         <input type="submit" value="Pesquisar">
     </form>
     <form method="POST" action="">
-        <input type="text" name="new_name" placeholder="Digite um novo nome">
+        <input type="text" name="new_nome" placeholder="Digite um novo nome">
         <input type="submit" value="Adicionar">
     </form>
     <table>
         <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>nome</th>
             <th>Ações</th>
         </tr>
         <?php
@@ -96,7 +96,7 @@
         $servername = "db";
         $username = "admin";
         $password = "admin";
-        $dbname = "meubanco";
+        $dbname = "SRE";
 
         $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -106,12 +106,12 @@
         }
 
         // Adicionar novo registro
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_name"])) {
-            $new_name = $_POST["new_name"];
-            $result = $conn->query("SELECT MAX(id) AS max_id FROM Person");
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["new_nome"])) {
+            $new_nome = $_POST["new_nome"];
+            $result = $conn->query("SELECT MAX(id) AS max_id FROM Pessoa");
             $row = $result->fetch_assoc();
             $new_id = $row["max_id"] + 1;
-            $sql = "INSERT INTO Person (id, name) VALUES ('$new_id', '$new_name')";
+            $sql = "INSERT INTO Pessoa (id, nome) VALUES ('$new_id', '$new_nome')";
             if ($conn->query($sql) === TRUE) {
                 echo "Novo registro adicionado com sucesso!";
             } else {
@@ -122,7 +122,7 @@
         // Excluir registro
         if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["delete_id"])) {
             $delete_id = $_POST["delete_id"];
-            $sql = "DELETE FROM Person WHERE id='$delete_id'";
+            $sql = "DELETE FROM Pessoa WHERE id='$delete_id'";
             if ($conn->query($sql) === TRUE) {
                 echo "Registro excluído com sucesso!";
             } else {
@@ -131,10 +131,10 @@
         }
 
         // Atualizar nome do registro
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["edit_id"]) && isset($_POST["edit_name"])) {
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["edit_id"]) && isset($_POST["edit_nome"])) {
             $edit_id = $_POST["edit_id"];
-            $edit_name = $_POST["edit_name"];
-            $sql = "UPDATE Person SET name='$edit_name' WHERE id='$edit_id'";
+            $edit_nome = $_POST["edit_nome"];
+            $sql = "UPDATE Pessoa SET nome='$edit_nome' WHERE id='$edit_id'";
             if ($conn->query($sql) === TRUE) {
                 echo "Registro atualizado com sucesso!";
             } else {
@@ -143,14 +143,14 @@
         }
 
         // Selecionar dados da tabela
-        $name = isset($_GET['name']) ? $_GET['name'] : '';
-        $sql = "SELECT id, name FROM Person WHERE name LIKE '%$name%'";
+        $nome = isset($_GET['nome']) ? $_GET['nome'] : '';
+        $sql = "SELECT id, nome FROM Pessoa WHERE nome LIKE '%$nome%'";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             // Exibir dados em cada linha
             while($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $row["id"]. "</td><td>" . $row["name"]. "</td>
+                echo "<tr><td>" . $row["id"]. "</td><td>" . $row["nome"]. "</td>
                 <td>
                     <form method='POST' action='' style='display:inline;'>
                         <input type='hidden' name='delete_id' value='" . $row["id"] . "'>
@@ -163,7 +163,7 @@
                     <button class='edit-btn' onclick='showEditForm(" . $row["id"] . ")'>Editar</button>
                     <form id='edit-form-" . $row["id"] . "' method='POST' action='' class='edit-form'>
                         <input type='hidden' name='edit_id' value='" . $row["id"] . "'>
-                        <input type='text' name='edit_name' value='" . $row["name"] . "''>
+                        <input type='text' name='edit_nome' value='" . $row["nome"] . "''>
                         <input type='submit' value='Salvar' class='edit-btn'>
                     </form>
                 </td></tr>";
