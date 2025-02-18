@@ -1,16 +1,20 @@
 #!/bin/bash
 
-docker network rm sre_default
-docker network create sre_default
+docker rm db --force 2> /dev/null
+docker rm www --force 2> /dev/null
+docker network rm SRE 2> /dev/null
+docker volume remove db_volume 2> /dev/null
+docker rmi php_apache 2> /dev/null
+docker rmi db_mysql 2> /dev/null
 
-docker rmi php_apache
-docker build -t php_apache ./apache/
+docker network create SRE
 
-docker rmi db_mysql
-docker build -t db_mysql ./mysql/
+docker volume create db_volume
 
-docker rm db --force
-docker run --name db --network=sre_default -e MYSQL_ROOT_PASSWORD=987654321 -e MYSQL_USER=admin -e MYSQL_PASSWORD=admin -e MYSQL_DATABASE=SRE -p 3306:3306 -d db_mysql --default-authentication-plugin=mysql_native_password
+docker build -t maxwellwolf/apache:1.0 ./apache/
 
-docker rm www --force
-docker run --name www --mount type=bind,src=.,dst=/var/www/html,ro --network=sre_default --link db:db -p 80:80 -d php_apache
+docker build -t maxwellwolf/mysql:1.0 ./mysql/
+
+docker run --name db --network=SRE -v db_volume:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=987654321 -e MYSQL_PASSWORD=admin -p 3306:3306 -d maxwellwolf/mysql:1.0
+
+docker run --name www --network=SRE -p 80:80 -d maxwellwolf/apache:1.0
