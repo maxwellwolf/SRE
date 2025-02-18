@@ -25,7 +25,20 @@ Siga as instruções abaixo para configurar um ambiente Docker com Apache e MySQ
 
 ## Passo a Passo
 
-### 1. Remover imagens, contêineres, redes e volumes antigos
+### 1. Clonando repositório do desafio.
+Clone esse repositório na sua maquina.
+
+```
+git clone https://github.com/maxwellwolf/SRE.git
+```
+
+Acesse a pasta SRE
+
+```
+cd ./SRE
+```
+
+### 2. Remover imagens, contêineres, redes e volumes antigos
 
 Removendo imagens, contêineres, redes e volumes antigos para evitar conflitos:
 
@@ -37,28 +50,28 @@ docker volume remove db_volume
 docker rmi php_apache
 docker rmi db_mysql
 ```
-### 2. Criar uma rede Docker
+### 3. Criar uma rede Docker
 Crie uma nova rede bridge chamada SRE para conectarmos nossos containers:
 
 ```bash
 docker network create SRE
 ```
 
-### 3. Criar um volume Docker
+### 4. Criar um volume Docker
 Crie um novo volume chamado db_volume, ele será usado como persistência para nosso banco de dados:
 
 ```bash
 docker volume create db_volume
 ```
 
-### 4. Construir as imagens Docker
+### 5. Construir as imagens Docker
 Construa as imagens Docker para Apache e MySQL a partir dos Dockerfiles nos diretórios ./apache/ e ./mysql/:
 
 ```bash
 docker build -t maxwellwolf/apache:1.0 ./apache/
 docker build -t maxwellwolf/mysql:1.0 ./mysql/
 ```
-### 5. Executar os contêineres Docker
+### 6. Executar os contêineres Docker
 Execute o contêiner MySQL:
 
 ```bash
