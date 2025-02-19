@@ -44,10 +44,20 @@ Removendo imagens, contêineres, redes e volumes antigos para evitar conflitos:
 
 ```bash
 docker rm db --force
+```
+```bash
 docker rm www --force
+```
+```bash
 docker network rm SRE
+```
+```bash
 docker volume remove db_volume
+```
+```bash
 docker rmi php_apache
+```
+```bash
 docker rmi db_mysql
 ```
 ### 3. Criar uma rede Docker
@@ -69,6 +79,8 @@ Construa as imagens Docker para Apache e MySQL a partir dos Dockerfiles nos dire
 
 ```bash
 docker build -t maxwellwolf/apache:1.0 ./apache/
+```
+```bash
 docker build -t maxwellwolf/mysql:1.0 ./mysql/
 ```
 ### 6. Executar os contêineres Docker
